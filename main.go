@@ -1,0 +1,39 @@
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type Movie struct{
+	ID int `json:"id"`
+	Title string `json:"title"`
+	Description string `json:"description"`
+}
+
+
+var movies = []Movie{}
+
+
+func CreateMovie(c *gin.Context){
+	var newMovie Movie
+
+	//tratamento de erros com go lang
+	if err := c.BindJSON(&newMovie); err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	newMovie.ID = len(movies)+1
+	movies = append(movies, newMovie)
+	c.JSON(http.StatusOK, newMovie)
+	} 
+func GetMovies(c *gin.Context){
+	c.JSON(http.StatusOK, movies);
+}
+func main(){
+		r:= gin.Default();
+		r.POST("/movie", CreateMovie);
+		r.GET("/movies", GetMovies)
+		r.Run(":8080")
+}

@@ -31,6 +31,8 @@ func CreateMovie(c *gin.Context){
 func GetMovies(c *gin.Context){
 	c.JSON(http.StatusOK, movies);
 }
+
+
 func main(){
 		r:= gin.Default();
 		r.POST("/movie", CreateMovie);
